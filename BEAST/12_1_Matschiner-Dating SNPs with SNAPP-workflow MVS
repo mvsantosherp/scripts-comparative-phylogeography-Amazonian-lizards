@@ -1,0 +1,63 @@
+##########################################
+######        Manuela Santos        ######
+######          Março/2025          ######
+## Divergence Time Estimation with SPNs ##
+## constraining with secondary dates    ##
+## obtained with Sanger sequencing      ##
+##########################################
+
+## Adapted from https://github.com/mmatschiner/tutorials/tree/master/divergence_time_estimation_with_snp_data
+## .xml script will be generated using the ruby script 'snapp_prep.rb'
+## SNPs dataset (in here we used low-coverage whole genome sequencing)
+## based on dates estimated by Santos et al. 2022 (https://doi.org/10.1007/s11692-022-09583-z)
+
+##########################
+######    Step 1    ######
+##########################
+
+#create a constrain date and prior using nano (constrains.txt)
+
+normal(0,11.2,3.4)    crown East_Xingu,Solimoes,Northern_AMZ,Upper_MAD,Middle_SEDI,Lower_TAP,Upper_TAP
+
+#specify the prior distribution used, in our case 'normal' + offset = 0 + higher date + lower date
+#named 'crown', since its divergence time estimated for all populations, followed by the name of all populations contained in the vcf
+
+##########################
+######    Step 2    ######
+##########################
+
+#create a tab delimited population file using nano, with the first column containing the populations and the second with the sample names
+
+Cn  HT5206_Cn
+Cn  MTR37449_Cn
+Cn  MTR37484_Cn
+Ex  BM133_Ex
+Ex  BM316_Ex
+Ex  MSH12664_Ex
+Lm  H1106_Lm
+Lm  H1480_Lm
+Lm  MTR25696_Lm
+Sol AOM182_Sol
+Sol MTR35704_Sol
+Sol MTR37100_Sol
+Tap1    HT5219_Tap1
+Tap1    HT9250_Tap1
+Tap2    SJBH056_Tap2
+Tap2    UFA090_Tap2
+Tap2    LG1233_Tap2
+Um  HERP5948_Um
+Um  MTR13236_Um
+Um  MTR19274_Um
+
+##########################
+######    Step 3    ######
+##########################
+
+#final command line
+# -m = number of variant sites used from the .vcf dataset
+# -l number of MCMC generations
+# for more flags from the script use 'ruby snapp_prep.rb -h'
+
+ruby snapp_prep.rb -v subset_snap_u_nomissing.vcf -t samples.txt -c constrainsts.txt -m 2000 -l 100000000 -x teste1_dating.xml
+
+DONE!
